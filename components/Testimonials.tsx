@@ -1,7 +1,45 @@
-import React from "react";
+"use client";
+
+import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 
+const testimonials = [
+    { img: '11', name: 'Ahmad bin Abdullah', job: 'Guru, SMK Kuala Lumpur', amount: 'RM50,000', review: 'Proses yang sangat pantas dan mudah. Saya memohon pada pagi Isnin dan wang sudah masuk akaun pada petang yang sama.', stars: 5 },
+    { img: '5', name: 'Siti Nurhaliza', job: 'Jururawat, HKL', amount: 'RM35,000', review: 'Saya ada masalah CTOS sedikit tapi Kredit Rakyat tetap bantu untuk mendapatkan kelulusan. Kadar yang ditawarkan juga lebih baik!', stars: 5 },
+    { img: '3', name: 'Muhammad Rizal', job: 'Pegawai, Kementerian', amount: 'RM80,000', review: 'Penyatuan hutang berjaya mengurangkan komitmen bulanan saya dari RM1,200 kepada RM800. Penjimatan yang besar!', stars: 5 },
+    { init: 'K', color: 'from-blue-500 to-blue-600', name: 'Kumaravel', job: 'Pegawai Teknik, JKR', amount: 'RM60,000', review: 'Pilihan koperasi yang banyak dan boleh bandingkan kadar. Staff consultant sangat professional dan tidak pushy.', stars: 4.5 },
+    { init: 'F', color: 'from-purple-500 to-purple-600', name: 'Faridah Hassan', job: 'Pegawai, JAIN', amount: 'RM45,000', review: 'Dari segi patuh syariah, saya yakin dengan Kredit Rakyat. Semua dokumen jelas dan transparent. Tiada caj tersembunyi.', stars: 5 },
+    { init: 'Z', color: 'from-orange-500 to-orange-600', name: 'Zulkifli', job: 'Polis Bantuan, IPD', amount: 'RM120,000', review: 'Pinjaman perumahan untuk program LPHS berjaya diluluskan dalam masa 2 hari. Staff sangat knowledgeable.', stars: 5 },
+];
+
 export default function Testimonials() {
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const [activeIndex, setActiveIndex] = useState(0);
+
+    useEffect(() => {
+        const container = scrollRef.current;
+        if (!container) return;
+
+        const handleScroll = () => {
+            const scrollLeft = container.scrollLeft;
+            const cardWidth = container.offsetWidth * 0.85;
+            const gap = 24;
+            const index = Math.round(scrollLeft / (cardWidth + gap));
+            setActiveIndex(Math.min(index, testimonials.length - 1));
+        };
+
+        container.addEventListener('scroll', handleScroll, { passive: true });
+        return () => container.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const scrollToIndex = (index: number) => {
+        const container = scrollRef.current;
+        if (!container) return;
+        const cardWidth = container.offsetWidth * 0.85;
+        const gap = 24;
+        container.scrollTo({ left: index * (cardWidth + gap), behavior: 'smooth' });
+    };
+
     return (
         <section id="testimoni" className="py-24 bg-surface relative overflow-hidden">
             <div className="absolute top-20 left-10 w-20 h-20 bg-lime/30 rounded-full blur-xl"></div>
@@ -14,6 +52,7 @@ export default function Testimonials() {
                     <p className="text-gray-600 text-lg">Lebih 10,000 penjawat awam telah mempercayai Kredit Rakyat.</p>
                 </div>
 
+                {/* Stats Row */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
                     {[
                         { label: 'Rating Purata', value: '4.9/5' },
@@ -28,23 +67,35 @@ export default function Testimonials() {
                     ))}
                 </div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {[
-                        { img: '11', name: 'Ahmad bin Abdullah', job: 'Guru, SMK Kuala Lumpur', amount: 'RM50,000', review: 'Proses yang sangat pantas dan mudah. Saya memohon pada pagi Isnin dan wang sudah masuk akaun pada petang yang sama.', stars: 5 },
-                        { img: '5', name: 'Siti Nurhaliza', job: 'Jururawat, HKL', amount: 'RM35,000', review: 'Saya ada masalah CTOS sedikit tapi Kredit Rakyat tetap bantu untuk mendapatkan kelulusan. Kadar yang ditawarkan juga lebih baik!', stars: 5 },
-                        { img: '3', name: 'Muhammad Rizal', job: 'Pegawai, Kementerian', amount: 'RM80,000', review: 'Penyatuan hutang berjaya mengurangkan komitmen bulanan saya dari RM1,200 kepada RM800. Penjimatan yang besar!', stars: 5 },
-                        { init: 'K', color: 'from-blue-500 to-blue-600', name: 'Kumaravel', job: 'Pegawai Teknik, JKR', amount: 'RM60,000', review: 'Pilihan koperasi yang banyak dan boleh bandingkan kadar. Staff consultant sangat professional dan tidak pushy.', stars: 4.5 },
-                        { init: 'F', color: 'from-purple-500 to-purple-600', name: 'Faridah Hassan', job: 'Pegawai, JAIN', amount: 'RM45,000', review: 'Dari segi patuh syariah, saya yakin dengan Kredit Rakyat. Semua dokumen jelas dan transparent. Tiada caj tersembunyi.', stars: 5 },
-                        { init: 'Z', color: 'from-orange-500 to-orange-600', name: 'Zulkifli', job: 'Polis Bantuan, IPD', amount: 'RM120,000', review: 'Pinjaman perumahan untuk program LPHS berjaya diluluskan dalam masa 2 hari. Staff sangat knowledgeable.', stars: 5 },
-                    ].map((test, i) => (
-                        <div key={i} className="testimonial-card gradient-border bg-white rounded-3xl p-8 shadow-lg relative">
+                {/* Swipeable Carousel */}
+                <div
+                    ref={scrollRef}
+                    className="flex gap-6 overflow-x-auto scroll-smooth pb-4 -mx-4 px-4"
+                    style={{
+                        scrollSnapType: 'x mandatory',
+                        WebkitOverflowScrolling: 'touch',
+                        scrollbarWidth: 'none',
+                        msOverflowStyle: 'none',
+                    }}
+                >
+                    {testimonials.map((test, i) => (
+                        <div
+                            key={i}
+                            className="testimonial-card gradient-border bg-white rounded-3xl p-8 shadow-lg relative flex-shrink-0"
+                            style={{
+                                scrollSnapAlign: 'start',
+                                width: '85%',
+                                maxWidth: '400px',
+                                minWidth: '280px',
+                            }}
+                        >
                             <div className="flex items-center gap-1 mb-4">
                                 {[...Array(Math.floor(test.stars))].map((_, idx) => (
                                     <i key={idx} className="fas fa-star star-rating text-yellow-400 text-sm"></i>
                                 ))}
                                 {test.stars % 1 !== 0 && <i className="fas fa-star-half-alt star-rating text-yellow-400 text-sm"></i>}
                             </div>
-                            <p className="text-gray-700 text-sm leading-relaxed mb-6 italic">"{test.review}"</p>
+                            <p className="text-gray-700 text-sm leading-relaxed mb-6 italic">&quot;{test.review}&quot;</p>
                             <div className="flex items-center gap-4">
                                 {test.img ? (
                                     <Image src={`https://i.pravatar.cc/150?img=${test.img}`} alt={test.name} width={48} height={48} className="rounded-full object-cover" />
@@ -58,6 +109,21 @@ export default function Testimonials() {
                                 </div>
                             </div>
                         </div>
+                    ))}
+                </div>
+
+                {/* Navigation Dots */}
+                <div className="flex justify-center gap-2 mt-6">
+                    {testimonials.map((_, i) => (
+                        <button
+                            key={i}
+                            onClick={() => scrollToIndex(i)}
+                            className={`rounded-full transition-all duration-300 ${activeIndex === i
+                                    ? 'w-8 h-3 bg-primary'
+                                    : 'w-3 h-3 bg-gray-300 hover:bg-primary/50'
+                                }`}
+                            aria-label={`Go to testimonial ${i + 1}`}
+                        />
                     ))}
                 </div>
             </div>
