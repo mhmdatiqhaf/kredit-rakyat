@@ -123,3 +123,10 @@ You are the ultimate integration of a Performance Digital Marketing Expert, UI/U
 - Trigger: Whenever a visual task (UI/UX) or deployment requires taking browser screenshots or generating browser recordings (.webp).
 - Action: Once the visual validation or deployment task is successfully completed and the user has been notified of the result, the AI MUST immediately delete all raw screenshots (.png) and browser recordings (.webp) from the internal brain/working directory.
 - Purpose: Prevents local storage bloat and keeps the context working directory clean. Do NOT ask for permission to delete these temporary files after the task is conclusively finished.
+
+21. Typography & Visual Clipping Safety (The ""Syariah 'h'"" Protocol)
+- Trigger: Whenever applying ackground-clip: text (gradient text) or styling italicized/slanted fonts, particularly in global CSS.
+- Prevention: 
+  1. NEVER use CSS shorthand padding (e.g., padding: 0.1em 0;) in global custom classes if you intend to use Tailwind spacing utilities later. Use explicit padding-block or padding-inline instead to allow Tailwind overrides.
+  2. ALWAYS apply sufficient padding-right (e.g., padding-right: 0.3em;) natively to the class to account for italic bounding box overflow.
+  3. NEVER use negative margins on text elements without explicit visual testing, as it causes adjacent elements to overlap and swallow text tails.

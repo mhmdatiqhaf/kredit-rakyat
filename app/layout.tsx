@@ -20,6 +20,19 @@ const poppins = Poppins({
 export const metadata: Metadata = {
     title: "Kredit Rakyat | Pinjaman Peribadi Koperasi Kerajaan Malaysia",
     description: "Platform pembiayaan untuk penjawat awam. Pinjaman pantas, selamat & patuh syariah. Banding 10+ koperasi & bank terkemuka.",
+    openGraph: {
+        title: "Kredit Rakyat | Pinjaman Peribadi Koperasi",
+        description: "Platform pembiayaan untuk penjawat awam. Pinjaman pantas, selamat & patuh syariah. Banding 10+ koperasi & bank terkemuka.",
+        url: "https://kredit-rakyat.vercel.app",
+        siteName: "Kredit Rakyat",
+        locale: "ms_MY",
+        type: "website",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Kredit Rakyat | Pinjaman Peribadi Koperasi",
+        description: "Platform pembiayaan untuk penjawat awam. Pinjaman pantas, selamat & patuh syariah.",
+    },
 };
 
 export default function RootLayout({

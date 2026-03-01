@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 export default function Testimonials() {
     return (
@@ -46,7 +47,7 @@ export default function Testimonials() {
                             <p className="text-gray-700 text-sm leading-relaxed mb-6 italic">"{test.review}"</p>
                             <div className="flex items-center gap-4">
                                 {test.img ? (
-                                    <img src={`https://i.pravatar.cc/150?img=${test.img}`} alt={test.name} className="w-12 h-12 rounded-full object-cover" />
+                                    <Image src={`https://i.pravatar.cc/150?img=${test.img}`} alt={test.name} width={48} height={48} className="rounded-full object-cover" />
                                 ) : (
                                     <div className={`w-12 h-12 rounded-full bg-gradient-to-br flex items-center justify-center text-white font-bold ${test.color}`}>{test.init}</div>
                                 )}
