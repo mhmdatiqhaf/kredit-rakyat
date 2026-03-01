@@ -32,7 +32,7 @@ export default function Hero({ onOpenModal }: HeroProps) {
 
                         <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 leading-tight mb-6 max-w-5xl mx-auto">
                             Pinjaman Koperasi
-                            <span className="hero-gradient-text italic font-extrabold mx-2">Patuh Syariah</span>
+                            <span className="hero-gradient-text italic font-extrabold ml-2 pr-2">Patuh Syariah</span>
                             <br className="hidden sm:block" />
                             untuk
                             <span className="relative inline-block ml-2">
