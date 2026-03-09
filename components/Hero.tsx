@@ -8,12 +8,37 @@ interface HeroProps {
 
 export default function Hero({ onOpenModal }: HeroProps) {
     const [loanAmount, setLoanAmount] = useState(50000);
+    const [displayAmount, setDisplayAmount] = useState("50,000");
     const [tenure, setTenure] = useState(5);
     const interestRate = 0.035;
 
     const totalInterest = loanAmount * interestRate * tenure;
     const totalPayment = loanAmount + totalInterest;
     const monthlyPayment = Math.floor(totalPayment / (tenure * 12));
+
+    const formatNumber = (num: number): string => {
+        return num.toLocaleString();
+    };
+
+    const handleLoanInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const raw = e.target.value.replace(/[^0-9]/g, "");
+        if (raw === "") {
+            setDisplayAmount("");
+            setLoanAmount(0);
+            return;
+        }
+        const num = parseInt(raw, 10);
+        setDisplayAmount(formatNumber(num));
+        setLoanAmount(num);
+    };
+
+    const handleLoanBlur = () => {
+        let clamped = loanAmount;
+        if (clamped < 1000) clamped = 1000;
+        if (clamped > 200000) clamped = 200000;
+        setLoanAmount(clamped);
+        setDisplayAmount(formatNumber(clamped));
+    };
 
     return (
         <section className="relative min-h-screen pt-24 pb-12 lg:pt-32 lg:pb-24 overflow-hidden bg-surface">
@@ -45,7 +70,7 @@ export default function Hero({ onOpenModal }: HeroProps) {
 
                         <p className="text-lg text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto font-light">
                             Platform <strong className="text-primary font-semibold">One-Stop Center</strong> yang membandingkan tawaran daripada
-                            <span className="text-gray-900 font-semibold mx-1">10+ Koperasi & Bank</span> terkemuka.
+                            <span className="text-gray-900 font-semibold mx-1">10+ Koperasi &amp; Bank</span> terkemuka.
                             Kelulusan dalam <span className="bg-lime/30 px-2 py-0.5 rounded font-semibold text-primary">1 Hari Bekerja</span>.
                         </p>
 
@@ -84,18 +109,20 @@ export default function Hero({ onOpenModal }: HeroProps) {
 
                                     <div className="space-y-4">
                                         <div>
-                                            <div className="flex justify-between mb-2">
-                                                <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Jumlah Pinjaman</label>
-                                                <span className="text-lg font-bold text-primary">RM{loanAmount.toLocaleString()}</span>
+                                            <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2 block">Jumlah Pinjaman</label>
+                                            <div className="relative">
+                                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-bold text-primary select-none">RM</span>
+                                                <input
+                                                    type="text"
+                                                    inputMode="numeric"
+                                                    value={displayAmount}
+                                                    onChange={handleLoanInput}
+                                                    onBlur={handleLoanBlur}
+                                                    placeholder="50,000"
+                                                    className="w-full pl-14 pr-4 py-3.5 text-2xl font-bold text-gray-900 bg-white/80 backdrop-blur border-2 border-gray-200 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                                                />
                                             </div>
-                                            <input
-                                                type="range"
-                                                min="1000"
-                                                max="200000"
-                                                value={loanAmount}
-                                                className="w-full"
-                                                onChange={(e) => setLoanAmount(Number(e.target.value))}
-                                            />
+                                            <p className="text-[10px] text-gray-400 mt-1.5">Min: RM 1,000 &bull; Maks: RM 200,000</p>
                                         </div>
 
                                         <div>
