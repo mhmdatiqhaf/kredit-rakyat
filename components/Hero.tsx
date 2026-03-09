@@ -34,10 +34,16 @@ export default function Hero({ onOpenModal }: HeroProps) {
 
     const handleLoanBlur = () => {
         let clamped = loanAmount;
-        if (clamped < 1000) clamped = 1000;
+        if (clamped < 3000) clamped = 3000;
         if (clamped > 200000) clamped = 200000;
         setLoanAmount(clamped);
         setDisplayAmount(formatNumber(clamped));
+    };
+
+    const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const num = parseInt(e.target.value, 10);
+        setLoanAmount(num);
+        setDisplayAmount(formatNumber(num));
     };
 
     return (
@@ -110,8 +116,8 @@ export default function Hero({ onOpenModal }: HeroProps) {
                                     <div className="space-y-4">
                                         <div>
                                             <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2 block">Jumlah Pinjaman</label>
-                                            <div className="relative">
-                                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-bold text-primary select-none">RM</span>
+                                            <div className="relative group">
+                                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-bold text-primary select-none pointer-events-none">RM</span>
                                                 <input
                                                     type="text"
                                                     inputMode="numeric"
@@ -119,10 +125,23 @@ export default function Hero({ onOpenModal }: HeroProps) {
                                                     onChange={handleLoanInput}
                                                     onBlur={handleLoanBlur}
                                                     placeholder="50,000"
-                                                    className="w-full pl-14 pr-4 py-3.5 text-2xl font-bold text-gray-900 bg-white/80 backdrop-blur border-2 border-gray-200 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                                                    className="w-full pl-14 pr-12 py-3.5 text-2xl font-bold text-gray-900 bg-white/80 hover:bg-white backdrop-blur border-2 border-gray-200 hover:border-primary/50 cursor-text rounded-xl focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all shadow-sm group-hover:shadow-md"
                                                 />
+                                                <i className="fas fa-pencil-alt absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 group-hover:text-primary/70 group-focus-within:text-primary transition-colors pointer-events-none data-aos='fade-in' data-aos-delay='600'"></i>
                                             </div>
-                                            <p className="text-[10px] text-gray-400 mt-1.5">Min: RM 1,000 &bull; Maks: RM 200,000</p>
+                                            <input
+                                                type="range"
+                                                min="3000"
+                                                max="200000"
+                                                step="1000"
+                                                value={loanAmount || 3000}
+                                                onChange={handleSliderChange}
+                                                className="w-full h-2 mt-4 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary"
+                                            />
+                                            <div className="flex justify-between items-center mt-2">
+                                                <p className="text-[10px] text-gray-400 font-medium">Min: RM 3,000</p>
+                                                <p className="text-[10px] text-gray-400 font-medium">Maks: RM 200,000</p>
+                                            </div>
                                         </div>
 
                                         <div>
